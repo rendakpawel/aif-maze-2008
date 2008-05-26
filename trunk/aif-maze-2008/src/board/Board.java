@@ -53,7 +53,7 @@ public class Board {
 	 * @param y Y coordinate for the grid.
 	 * @return Unique key.
 	 */
-	public int generateKey(int x, int y) {
+	private int generateKey(int x, int y) {
 		return x * 10000 + y;
 	}
 	
