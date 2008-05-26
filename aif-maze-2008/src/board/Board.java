@@ -27,7 +27,7 @@ public class Board {
 	 * @param height Height of the board.
 	 */
 	public Board(int width, int height) {
-
+		
 		/*
 		 * Initializes new grid for the board.
 		 */
@@ -54,7 +54,7 @@ public class Board {
 	 * @return Unique key.
 	 */
 	public int generateKey(int x, int y) {
-		return x * 1000 + y;
+		return x * 10000 + y;
 	}
 	
 	/**
@@ -76,7 +76,7 @@ public class Board {
 	private int[] parseKey(int key) {
 		int[] coordinates = new int[2];
 		coordinates[1] = key % 10000;
-		coordinates[0] = key - coordinates[1];
+		coordinates[0] = (key - coordinates[1]) / 10000;
 		return coordinates;
 	}
 }
