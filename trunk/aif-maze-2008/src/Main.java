@@ -21,7 +21,7 @@ public class Main {
 	static private void tests(){
 		
 		Board b = new Board(8,4);
-		b.writeToConsoleBlocks();
+		// b.writeToConsoleBlocks();
 		
 	}
 
