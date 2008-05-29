@@ -5,6 +5,7 @@ import maze.Maze;
 import exceptions.CellsAreNotNeighborsException;
 import exceptions.MazeNotGeneratedException;
 import exceptions.OutOfBoardException;
+import gui.ProjectFrame;
 
 
 public class Main {
@@ -17,6 +18,9 @@ public class Main {
 	 * @param args Command line arguments
 	 */
 	public static void main(String[] args) {
+		
+		ProjectFrame window = new ProjectFrame();
+		window.setVisible(true);
 		
 		Maze maze = new Maze(10,10);
 		maze.setDebugMode(false);

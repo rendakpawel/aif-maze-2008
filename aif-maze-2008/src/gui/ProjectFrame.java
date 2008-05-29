@@ -11,9 +11,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 
 
-public class ProjectFrame {
+public class ProjectFrame extends JFrame {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5204259716797205248L;
 	private JFrame jFrame = null;  //  @jve:decl-index=0:visual-constraint="30,5"
 	private JPanel jContentPane = null;
 	private JSplitPane jSplitPane = null;
