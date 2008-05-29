@@ -9,61 +9,32 @@ import java.awt.event.KeyEvent;
 import javax.swing.JSplitPane;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 
 public class ProjectFrame extends JFrame {
 
-
+	private static final long serialVersionUID = -5204259716797205248L;
+	private JMenuBar jJMenuBar = null;
+	private JMenuItem jMenuItem = null;
 	/**
+	 * This method initializes 
 	 * 
 	 */
-	private static final long serialVersionUID = -5204259716797205248L;
-	private JFrame jFrame = null;  //  @jve:decl-index=0:visual-constraint="30,5"
-	private JPanel jContentPane = null;
-	private JSplitPane jSplitPane = null;
-	private JMenuBar jJMenuBar = null;
-	private JMenu jMenu = null;
-
-	/**
-	 * This method initializes jFrame	
-	 * 	
-	 * @return javax.swing.JFrame	
-	 */
-	private JFrame getJFrame() {
-		if (jFrame == null) {
-			jFrame = new JFrame();
-			jFrame.setSize(new Dimension(498, 359));
-			jFrame.setJMenuBar(getJJMenuBar());
-			jFrame.setContentPane(getJContentPane());
-		}
-		return jFrame;
+	public ProjectFrame() {
+		super();
+		initialize();
 	}
 
 	/**
-	 * This method initializes jContentPane	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes this
+	 * 
 	 */
-	private JPanel getJContentPane() {
-		if (jContentPane == null) {
-			jContentPane = new JPanel();
-			jContentPane.setLayout(new BorderLayout());
-			jContentPane.add(getJSplitPane(), BorderLayout.CENTER);
-		}
-		return jContentPane;
-	}
-
-	/**
-	 * This method initializes jSplitPane	
-	 * 	
-	 * @return javax.swing.JSplitPane	
-	 */
-	private JSplitPane getJSplitPane() {
-		if (jSplitPane == null) {
-			jSplitPane = new JSplitPane();
-			jSplitPane.setDividerLocation(400);
-		}
-		return jSplitPane;
+	private void initialize() {
+        this.setSize(new Dimension(320, 254));	
+        this.setContentPane(getJMenuItem());
+        this.setJMenuBar(getJJMenuBar());
+        this.setTitle("AIF Maze 2008");
 	}
 
 	/**
@@ -74,33 +45,27 @@ public class ProjectFrame extends JFrame {
 	private JMenuBar getJJMenuBar() {
 		if (jJMenuBar == null) {
 			jJMenuBar = new JMenuBar();
-			jJMenuBar.setPreferredSize(new Dimension(0, 26));
-			jJMenuBar.add(getJMenu());
+			jJMenuBar.add(getJMenuItem());
 		}
 		return jJMenuBar;
 	}
 
 	/**
-	 * This method initializes jMenu	
+	 * This method initializes jMenuItem	
 	 * 	
-	 * @return javax.swing.JMenu	
+	 * @return javax.swing.JMenuItem	
 	 */
-	private JMenu getJMenu() {
-		if (jMenu == null) {
-			jMenu = new JMenu();
-			jMenu.setText("Close");
-			jMenu.setMnemonic(KeyEvent.VK_C);
+	private JMenuItem getJMenuItem() {
+		if (jMenuItem == null) {
+			jMenuItem = new JMenuItem();
+			jMenuItem.setText("Close");
+			jMenuItem.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					System.exit(0);
+				}
+			});
 		}
-		return jMenu;
+		return jMenuItem;
 	}
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.println("asd");
-		
-	}
-
-}
+}  //  @jve:decl-index=0:visual-constraint="45,15"
