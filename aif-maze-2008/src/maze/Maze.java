@@ -1,3 +1,5 @@
+package maze;
+
 import java.awt.Point;
 import java.util.List;
 import java.util.Random;
