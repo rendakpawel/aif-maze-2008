@@ -483,8 +483,8 @@ public class Maze extends Board {
 	 * The way out is registered on a solution stack.
 	 * 
 	 * Returns the solution of the maze as a stack
-	 * of Points starting from exit (bottom of stack)
-	 * to entry (top of the stack).
+	 * of Points starting from exit (top of stack)
+	 * to entry (bottom of the stack).
 	 * 
 	 * @return Stack of point coordinates representing solution.
 	 * @throws MazeNotGeneratedException Thrown when maze hasn't been generated yet.
