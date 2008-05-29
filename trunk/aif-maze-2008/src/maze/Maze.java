@@ -22,6 +22,16 @@ import exceptions.OutOfBoardException;
 public class Maze extends Board {
 	
 	/**
+	 * Indicates if maze is in debug mode.
+	 * If yes generation and solving processes 
+	 * will be displayed in standard output.
+	 * By default debug mode is false.
+	 */
+	private boolean debugMode = false;
+	
+	private boolean isGenerated = false;
+	
+	/**
 	 * Contains information on cells visited my sprite.
 	 */
 	private Stack<Integer> mySolution;
@@ -77,14 +87,6 @@ public class Maze extends Board {
 		this.generationStack = new Stack<Integer>();
 		this.visitedCells = new Vector<Integer>();
 		this.mySolution = new Stack<Integer>();
-
-		try {
-			this.generateMaze();
-		} catch (CellsAreNotNeighborsException e) {
-			System.err.println("Generation of the maze tryied to operate on non neighbors...");
-		} catch (OutOfBoardException e) {
-			System.err.println("Generation of the maze somehow got out of the board...");
-		}
 	}
 	
 	/**
@@ -96,91 +98,103 @@ public class Maze extends Board {
 	 * tries to operate on non-neighboring cells.
 	 * @throws OutOfBoardException Thrown when generation exceeds board.
 	 */
-	private void generateMaze() throws CellsAreNotNeighborsException, OutOfBoardException {
-		System.out.println("Starting maze generation...");
-		Random rnd = new Random();
-		
-		System.out.println("Starting first junction...");
-		/*
-		 * Selecting random cell from which the
-		 * generation of the maze shell start and
-		 * its random neighbor.
-		 */
-		int currentX = rnd.nextInt(this.myWidth - 1) + 1;
-		int currentY = rnd.nextInt(this.myHeight - 1) + 1;	
-		
-		System.out.println("Initial cell is [" + currentX + "," + currentY + "]");
-		
-		int nextX, nextY;
-				
-		System.out.println("First junction started!");
-		
-		int cellAmount = this.myHeight * this.myWidth;
-		while(this.visitedCells.size() < cellAmount - 1) {
-			if(!this.generationStack.contains(this.getKey(currentX, currentY)))
-				this.generationStack.push(this.getKey(currentX, currentY));
-			if(!this.visitedCells.contains(this.getKey(currentX, currentY)))
-				this.visitedCells.add(this.getKey(currentX, currentY));
-			
+	public void generateMaze() throws CellsAreNotNeighborsException, OutOfBoardException {
+		if (!this.isGenerated) {
+			if (this.debugMode)
+				System.out.println("Starting maze generation...");
+			Random rnd = new Random();
+			if (this.debugMode)
+				System.out.println("Starting first junction...");
 			/*
-			 * Checking for unvisited neighbors.
-			 * 
-			 * Case 1:
-			 * If there are some unvisited neighbors get random unvisited 
-			 * neighboring cell, then destroy wall between current cell
-			 * and newly selected one and switch current to it. 
-			 * New cell is added to list of visited cells and pushed onto stack.
+			 * Selecting random cell from which the
+			 * generation of the maze shell start and
+			 * its random neighbor.
 			 */
-			if(this.hasUnvisitedNeighbors(currentX, currentY)) {
-				int tmpNeighbor; 
-				do {
-					tmpNeighbor = this.getRandomNeighbor(currentX, currentY);
-				} while (this.visitedCells.contains(tmpNeighbor));
-				int[] tmp = this.parseKey(tmpNeighbor);
-				nextX = tmp[0];
-				nextY = tmp[1];
-				try {
-					if(this.isWallBetweenCells(currentX, currentY, nextX, nextY)) 
-						this.setWallBetweenCells(currentX, currentY, nextX, nextY, false);
-					currentX = nextX;
-					currentY = nextY;
-				} catch (CellsAreNotNeighborsException e) {
-					throw new CellsAreNotNeighborsException();
-				} catch (OutOfBoardException e) {
-					throw new OutOfBoardException();
+			int currentX = rnd.nextInt(this.myWidth - 1) + 1;
+			int currentY = rnd.nextInt(this.myHeight - 1) + 1;
+			if (this.debugMode)
+				System.out.println("Initial cell is [" + currentX + ","
+						+ currentY + "]");
+			int nextX, nextY;
+			if (this.debugMode)
+				System.out.println("First junction started!");
+			int cellAmount = this.myHeight * this.myWidth;
+			while (this.visitedCells.size() < cellAmount - 1) {
+				if (!this.generationStack.contains(this.getKey(currentX,
+						currentY)))
+					this.generationStack.push(this.getKey(currentX, currentY));
+				if (!this.visitedCells
+						.contains(this.getKey(currentX, currentY)))
+					this.visitedCells.add(this.getKey(currentX, currentY));
+
+				/*
+				 * Checking for unvisited neighbors.
+				 * 
+				 * Case 1:
+				 * If there are some unvisited neighbors get random unvisited 
+				 * neighboring cell, then destroy wall between current cell
+				 * and newly selected one and switch current to it. 
+				 * New cell is added to list of visited cells and pushed onto stack.
+				 */
+				if (this.hasUnvisitedNeighbors(currentX, currentY)) {
+					int tmpNeighbor;
+					do {
+						tmpNeighbor = this
+								.getRandomNeighbor(currentX, currentY);
+					} while (this.visitedCells.contains(tmpNeighbor));
+					int[] tmp = this.parseKey(tmpNeighbor);
+					nextX = tmp[0];
+					nextY = tmp[1];
+					try {
+						if (this.isWallBetweenCells(currentX, currentY, nextX,
+								nextY))
+							this.setWallBetweenCells(currentX, currentY, nextX,
+									nextY, false);
+						currentX = nextX;
+						currentY = nextY;
+					} catch (CellsAreNotNeighborsException e) {
+						throw new CellsAreNotNeighborsException();
+					} catch (OutOfBoardException e) {
+						throw new OutOfBoardException();
+					}
+
+					if (this.debugMode)
+						System.out.println("Current cell [" + currentX + ","
+								+ currentY + "]");
 				}
-				
-				System.out.println("Current cell [" + currentX + "," + currentY + "]");
-			}			
+				/*
+				 * Case 2:
+				 * If there are no unvisited neighbors backtrack the stack until
+				 * some cell with unvisited neighbors is found and proceed with case 1
+				 * from new junction.
+				 */
+				else {
+					if (this.debugMode) {
+						System.out.println();
+						this.printMaze();
+						System.out.println();
+						System.out.println("Starting new junction...");
+					}
+					while (!this.hasUnvisitedNeighbors(currentX, currentY)) {
+						int prevCell = this.generationStack.pop();
+						int[] tmp = this.parseKey(prevCell);
+						currentX = tmp[0];
+						currentY = tmp[1];
+					}
+				}
+			}
 			/*
-			 * Case 2:
-			 * If there are no unvisited neighbors backtrack the stack until
-			 * some cell with unvisited neighbors is found and proceed with case 1
-			 * from new junction.
+			 * Setting up exits.
 			 */
-			else {
+			this.chooseExits();
+			if (this.debugMode) {
+				System.out.println("Setting up exits...");
 				System.out.println();
 				this.printMaze();
 				System.out.println();
-				System.out.println("Starting new junction...");
-				while(!this.hasUnvisitedNeighbors(currentX, currentY)) {
-					int prevCell = this.generationStack.pop();
-					// this.generationStack.remove(prevCell);
-					int[] tmp = this.parseKey(prevCell);
-					currentX = tmp[0];
-					currentY = tmp[1];
-				}
-			}			
+			}
+			this.isGenerated = true;
 		}
-		
-		/*
-		 * Setting up exits...
-		 */
-		this.chooseExits();
-		System.out.println("Setting up exits...");
-		System.out.println();
-		this.printMaze();
-		System.out.println();
 	}
 	
 	/**
@@ -464,99 +478,131 @@ public class Maze extends Board {
 	}
 	
 	/**
-	 * Solves the maze using so called right hand rule.
+	 * Solves the maze using so called left hand rule.
 	 * The way out is registered on a solution stack.
 	 */
 	public void solveMaze() {
-		int[] start = this.parseKey(this.myEntry);
-		int[] end = this.parseKey(this.myExit);
-		int currentX = start[0];
-		int currentY = start[1];
-		
-		/*
-		 * Directions:
-		 * 0 - North
-		 * 1 - East
-		 * 2 - South
-		 * 3 - West
-		 */
-		int direction = 1;
-		if(currentX == this.myWidth) direction = 3;
-		if(currentY == this.myHeight) direction = 0;
-		if(currentX == 1) direction = 1;
-		if(currentY == 1) direction = 2;
-		
-		String[] directions = new String[4];
-		directions[0] = "NORTH";
-		directions[1] = "EAST";
-		directions[2] = "SOUTH";
-		directions[3] = "WEST";
-		
-		while(this.getKey(currentX, currentY) != this.getKey(end[0], end[1])) {
-			System.out.println("Current cell [" + currentX + "," + currentY + "]");
-			System.out.println("Current direction " + directions[direction]);
-			this.spriteX = currentX;
-			this.spriteY = currentY;
-			this.printMaze();
-			try {
-				// Sprite directed north
-				if(direction == 0 && !this.getEastWall(currentX, currentY)) {
-					// Go east...
-					currentX++;
-					direction = 1;
-					int currentKey = this.getKey(currentX, currentY);
-					this.mySolution.push(currentKey);
-					continue;
+		if (this.isGenerated) {
+			int[] start = this.parseKey(this.myEntry);
+			int[] end = this.parseKey(this.myExit);
+			int currentX = start[0];
+			int currentY = start[1];
+			/*
+			 * Directions:
+			 * 0 - North
+			 * 1 - East
+			 * 2 - South
+			 * 3 - West
+			 */
+			int direction = 1;
+			if (currentX == this.myWidth)
+				direction = 3;
+			if (currentY == this.myHeight)
+				direction = 0;
+			if (currentX == 1)
+				direction = 1;
+			if (currentY == 1)
+				direction = 2;
+			String[] directions = new String[4];
+			directions[0] = "NORTH";
+			directions[1] = "EAST";
+			directions[2] = "SOUTH";
+			directions[3] = "WEST";
+			while (this.getKey(currentX, currentY) != this.getKey(end[0],
+					end[1])) {
+				if (this.debugMode) {
+					System.out.println("Current cell [" + currentX + ","
+							+ currentY + "]");
+					System.out.println("Current direction "
+							+ directions[direction]);
 				}
-				else if(direction == 0 && this.getEastWall(currentX, currentY)) {
-					direction = 3;
-					continue;
+				this.spriteX = currentX;
+				this.spriteY = currentY;
+				if(this.debugMode) this.printMaze();
+				try {
+					// Sprite directed north
+					if (direction == 0 && !this.getEastWall(currentX, currentY)) {
+						if(this.getKey(currentX, currentY) == this.getKey(end[0],end[1])) { 
+							int currentKey = this.getKey(currentX, currentY);
+							this.mySolution.push(currentKey);
+							break;
+						}
+						// Go east...
+						currentX++;
+						direction = 1;
+						int currentKey = this.getKey(currentX, currentY);
+						this.mySolution.push(currentKey);
+						continue;
+					} else if (direction == 0
+							&& this.getEastWall(currentX, currentY)) {
+						direction = 3;
+						continue;
+					}
+
+					// Sprite directed east
+					if (direction == 1
+							&& !this.getSouthWall(currentX, currentY)) {
+						if(this.getKey(currentX, currentY) == this.getKey(end[0],end[1])) { 
+							int currentKey = this.getKey(currentX, currentY);
+							this.mySolution.push(currentKey);
+							break;
+						}
+						// Go south...
+						currentY++;
+						direction = 2;
+						int currentKey = this.getKey(currentX, currentY);
+						this.mySolution.push(currentKey);
+						continue;
+					} else if (direction == 1
+							&& this.getSouthWall(currentX, currentY)) {
+						direction = 0;
+						continue;
+					}
+
+					// Sprite directed south
+					if (direction == 2 && !this.getWestWall(currentX, currentY)) {
+						if(this.getKey(currentX, currentY) == this.getKey(end[0],end[1])) { 
+							int currentKey = this.getKey(currentX, currentY);
+							this.mySolution.push(currentKey);
+							break;
+						}
+						// Go west...
+						currentX--;
+						direction = 3;
+						int currentKey = this.getKey(currentX, currentY);
+						this.mySolution.push(currentKey);
+						continue;
+					} else if (direction == 2
+							&& this.getWestWall(currentX, currentY)) {
+						direction = 1;
+						continue;
+					}
+
+					// Sprite directed west
+					if (direction == 3
+							&& !this.getNorthWall(currentX, currentY)) {
+						if(this.getKey(currentX, currentY) == this.getKey(end[0],end[1])) { 
+							int currentKey = this.getKey(currentX, currentY);
+							this.mySolution.push(currentKey);
+							break;
+						}
+						// Go north...
+						currentY--;
+						direction = 0;
+						int currentKey = this.getKey(currentX, currentY);
+						this.mySolution.push(currentKey);
+						continue;
+					} else if (direction == 3
+							&& this.getNorthWall(currentX, currentY)) {
+						direction = 2;
+						continue;
+					}
+				} catch (OutOfBoardException e) {
+					System.err.println("Sprite went out of range!");
 				}
-				
-				// Sprite directed east
-				if(direction == 1 && !this.getSouthWall(currentX, currentY)) {
-					// Go south...
-					currentY++;
-					direction = 2;
-					int currentKey = this.getKey(currentX, currentY);
-					this.mySolution.push(currentKey);
-					continue;
-				}
-				else if(direction == 1 && this.getSouthWall(currentX, currentY)) {
-					direction = 0;
-					continue;
-				}
-				
-				// Sprite directed south
-				if(direction == 2 && !this.getWestWall(currentX, currentY)) {
-					// Go west...
-					currentX--;
-					direction = 3;
-					int currentKey = this.getKey(currentX, currentY);
-					this.mySolution.push(currentKey);
-					continue;
-				}
-				else if(direction == 2 && this.getWestWall(currentX, currentY)) {
-					direction = 1;
-					continue;
-				}
-				
-				// Sprite directed west
-				if(direction == 3 && !this.getNorthWall(currentX, currentY)) {
-					// Go north...
-					currentY--;
-					direction = 0;
-					int currentKey = this.getKey(currentX, currentY);
-					this.mySolution.push(currentKey);
-					continue;
-				}
-				else if(direction == 3 && this.getNorthWall(currentX, currentY)) {
-					direction = 2;
-					continue;
-				}
-			} catch (OutOfBoardException e) {
-				System.err.println("Sprite went out of range!");
 			}
+			this.spriteX = 0;
+			this.spriteY = 0;
 		}
 	}
 	
@@ -568,7 +614,7 @@ public class Maze extends Board {
 	 */
 	public Stack<Point> getSolution() {
 		Stack<Point> solution = new Stack<Point>();
-		for(int i = this.mySolution.size() - 1; i <= 0; i--) {			
+		for(int i = this.mySolution.size() - 1; i >= 0; i--) {			
 			int key = this.mySolution.elementAt(i);
 			this.mySolution.remove(i);
 			int[] coords = this.parseKey(key);
@@ -591,5 +637,16 @@ public class Maze extends Board {
 	 */
 	public int[] getExit() {
 		return this.parseKey(this.myExit);
+	}
+	
+	/**
+	 * Sets the debug mode on or off.
+	 * If debug mode is on (true) generation and solving processes 
+	 * will be traced by printing proper info to
+	 * standard output.
+	 * @param isOn Debug mode.
+	 */
+	public void setDebugMode(boolean isOn) {
+		this.debugMode = isOn;
 	}
 }
