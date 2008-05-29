@@ -496,6 +496,7 @@ public class Maze extends Board {
 	 */
 	public Stack<Point> solveMaze() throws MazeNotGeneratedException {
 		if (this.isGenerated) {
+			this.lockEntry();
 			int[] start = this.parseKey(this.myEntry);
 			int[] end = this.parseKey(this.myExit);
 			int currentX = start[0];
@@ -617,6 +618,7 @@ public class Maze extends Board {
 			this.spriteX = 0;
 			this.spriteY = 0;
 			this.optimizeSolution();
+			this.unlockEntry();
 			return this.getSolution();
 		}
 		throw new MazeNotGeneratedException();
@@ -697,4 +699,54 @@ public class Maze extends Board {
 		}
 		this.mySolution = temp;
 	}
+	
+	/**
+	 * Locks entry point for generation process, so that
+	 * sprite wouldn't go outside the board.
+	 */
+	private void lockEntry() {
+		int[] entry = this.parseKey(this.myEntry);
+		int x = entry[0];
+		int y = entry[1];
+		
+		try {
+			if(x == 1) this.setWestWall(x, y, true);
+			if(y == 1) this.setNorthWall(x, y, true);
+			if(x == this.myWidth) this.setEastWall(x, y, true);
+			if(y == this.myHeight) this.setSouthWall(x, y, true);
+		} catch (OutOfBoardException e) {
+			System.err.println("Cannot lock walls outside board!");
+		}
+	}
+	
+	/**
+	 * Reopens the entry point.
+	 */
+	private void unlockEntry() {
+		int[] entry = this.parseKey(this.myEntry);
+		int x = entry[0];
+		int y = entry[1];
+		
+		try {
+			if(x == 1) {
+				this.setWestWall(x, y, false);
+				return;
+			}
+			if(y == 1) {
+				this.setNorthWall(x, y, false);
+				return;
+			}
+			if(x == this.myWidth) {
+				this.setEastWall(x, y, false);
+				return;
+			}
+			if(y == this.myHeight) {
+				this.setSouthWall(x, y, false);
+				return;
+			}
+		} catch (OutOfBoardException e) {
+			System.err.println("Cannot lock walls outside board!");
+		}
+	}	
+	
 }
