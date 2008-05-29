@@ -1,3 +1,5 @@
+import maze.Maze;
+
 
 public class Main {
 
