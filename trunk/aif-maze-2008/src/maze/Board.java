@@ -203,4 +203,16 @@ public class Board {
 			throw new OutOfBoardException();
 		}
 	}
+	
+	/**
+	 * Resets board to initial state.
+	 */
+	protected void resetBoard() {
+		for (int x = 0; x < this.myWidth + 2; x++) {
+			for (int y = 0; y < this.myHeight + 2; y++) {
+				this.horizontalWalls[x][y] = true;
+				this.verticalWalls[x][y] = true;
+			}
+		}
+	}
 }
