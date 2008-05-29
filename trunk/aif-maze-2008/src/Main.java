@@ -1,6 +1,3 @@
-import board.Board;
-
-
 
 public class Main {
 
@@ -13,16 +10,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
-		tests();
+		Maze maze = new Maze(20,20);
+		System.out.println("\n\nSOLVING MAZE...\n\n");
+		maze.solveMaze();
 	}
-	
-	
-	
-	static private void tests(){
-		
-		Board b = new Board(8,4);
-		// b.writeToConsoleBlocks();
-		
-	}
-
 }
