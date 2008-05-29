@@ -672,6 +672,12 @@ public class Maze extends Board {
 		this.mySolution = new Stack<Integer>();
 	}
 	
+	/**
+	 * Optimizes solution by removing
+	 * double visited cells.
+	 * (i.e. all those sequences where sprite
+	 * reached dead end and went back to some point)
+	 */
 	private void optimizeSolution() {
 		Stack<Integer> temp = new Stack<Integer>();
 		while (!this.mySolution.isEmpty()) {
