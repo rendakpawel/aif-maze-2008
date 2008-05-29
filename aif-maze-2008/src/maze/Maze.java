@@ -7,6 +7,7 @@ import java.util.Stack;
 import java.util.Vector;
 
 import exceptions.CellsAreNotNeighborsException;
+import exceptions.MazeNotGeneratedException;
 import exceptions.OutOfBoardException;
 
 /**
@@ -478,10 +479,17 @@ public class Maze extends Board {
 	}
 	
 	/**
-	 * Solves the maze using so called left hand rule.
+	 * Solves the maze using so called right hand rule.
 	 * The way out is registered on a solution stack.
+	 * 
+	 * Returns the solution of the maze as a stack
+	 * of Points starting from exit (bottom of stack)
+	 * to entry (top of the stack).
+	 * 
+	 * @return Stack of point coordinates representing solution.
+	 * @throws MazeNotGeneratedException Thrown when maze hasn't been generated yet.
 	 */
-	public void solveMaze() {
+	public Stack<Point> solveMaze() throws MazeNotGeneratedException {
 		if (this.isGenerated) {
 			int[] start = this.parseKey(this.myEntry);
 			int[] end = this.parseKey(this.myExit);
@@ -603,20 +611,22 @@ public class Maze extends Board {
 			}
 			this.spriteX = 0;
 			this.spriteY = 0;
+			return getSolution();
 		}
+		throw new MazeNotGeneratedException();
 	}
 	
 	/**
 	 * Returns the solution of the maze as a stack
 	 * of Points starting from exit (bottom of stack)
 	 * to entry (top of the stack).
+	 * After calling this function solution is lost.
 	 * @return Solution back trace stack.
 	 */
-	public Stack<Point> getSolution() {
+	private Stack<Point> getSolution() {
 		Stack<Point> solution = new Stack<Point>();
-		for(int i = this.mySolution.size() - 1; i >= 0; i--) {			
-			int key = this.mySolution.elementAt(i);
-			this.mySolution.remove(i);
+		for(int i = this.mySolution.size(); i > 0; i--) {			
+			int key = this.mySolution.pop();
 			int[] coords = this.parseKey(key);
 			solution.push(new Point(coords[0],coords[1]));
 		}
@@ -648,5 +658,16 @@ public class Maze extends Board {
 	 */
 	public void setDebugMode(boolean isOn) {
 		this.debugMode = isOn;
+	}
+	
+	/**
+	 * Resets the maze to initial state.
+	 */
+	public void reset() {
+		this.resetBoard();
+		this.generationStack = new Stack<Integer>();
+		this.visitedCells = new Vector<Integer>();
+		this.isGenerated = false;
+		this.mySolution = new Stack<Integer>();
 	}
 }
