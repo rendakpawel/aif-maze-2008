@@ -611,7 +611,8 @@ public class Maze extends Board {
 			}
 			this.spriteX = 0;
 			this.spriteY = 0;
-			return getSolution();
+			this.optimizeSolution();
+			return this.getSolution();
 		}
 		throw new MazeNotGeneratedException();
 	}
@@ -669,5 +670,20 @@ public class Maze extends Board {
 		this.visitedCells = new Vector<Integer>();
 		this.isGenerated = false;
 		this.mySolution = new Stack<Integer>();
+	}
+	
+	private void optimizeSolution() {
+		Stack<Integer> temp = new Stack<Integer>();
+		while (!this.mySolution.isEmpty()) {
+			int key = this.mySolution.pop();
+			temp.push(key);
+			int tmpKey = 0;
+			if (this.mySolution.contains(key)) {
+				while (tmpKey != key)
+					tmpKey = this.mySolution.pop();
+				tmpKey = 0;
+			}
+		}
+		this.mySolution = temp;
 	}
 }
