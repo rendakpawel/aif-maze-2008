@@ -30,6 +30,10 @@ public class Maze extends Board {
 	 */
 	private boolean debugMode = false;
 	
+	/**
+	 * Indicates whether maze has been generated or
+	 * is still a clean board.
+	 */
 	private boolean isGenerated = false;
 	
 	/**
@@ -39,7 +43,8 @@ public class Maze extends Board {
 	
 	/**
 	 * This field is used for generating the maze.
-	 * It holds information on visited cells wh
+	 * It holds information on visited cells which have
+	 * been "used" in generation process. 
 	 */
 	private List<Integer> visitedCells;
 	
