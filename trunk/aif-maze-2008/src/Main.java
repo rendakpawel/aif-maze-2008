@@ -19,12 +19,13 @@ public class Main {
 	 * @param args Command line arguments
 	 */
 	public static void main(String[] args) {
-		
-		MazeFrame window = new MazeFrame();
-		window.setVisible(true);
+			
 		
 		Maze maze = new Maze(10,10);
 		maze.setDebugMode(false);
+		
+		MazeFrame window = new MazeFrame(maze);
+		window.setVisible(true);
 		
 		try {
 			maze.generateMaze();
