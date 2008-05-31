@@ -1,3 +1,4 @@
+package main;
 import gui.MazeGUIFrame;
 
 import javax.swing.UIManager;
