@@ -15,12 +15,12 @@ import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import maze.Maze;
-import javax.swing.JScrollPane;
 
 public class MazeFrame extends JFrame {
 
@@ -29,6 +29,8 @@ public class MazeFrame extends JFrame {
 	 */
 	static int DEFAULT_VALUE = 10;
 
+	private Maze myMaze = null;
+	
 	private JMenuBar jJMenuBar = null;
 	private JSplitPane jSplitPane = null;
 	private JPanel jPanelMenu = null;
@@ -47,12 +49,15 @@ public class MazeFrame extends JFrame {
 
 	private JScrollPane jScrollPane = null;
 
+	private JPanel jPanel = null;
+
 	/**
 	 * This method initializes
 	 * 
 	 */
-	public MazeFrame() {
+	public MazeFrame(Maze maze) {
 		super();
+		this.myMaze = maze;
 		initialize();
 	}
 
@@ -331,8 +336,21 @@ public class MazeFrame extends JFrame {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getMazePanel(this.myMaze));
 		}
 		return jScrollPane;
+	}
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel2() {
+		if (jPanel == null) {
+			jPanel.setLayout(new GridBagLayout());
+		}
+		return jPanel;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"
