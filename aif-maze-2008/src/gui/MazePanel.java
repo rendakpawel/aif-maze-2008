@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -66,6 +67,10 @@ public class MazePanel extends JPanel {
 		 */
 		super.setSize(scale * drawingMaze.getWidth() + 2 * scale, scale
 				* drawingMaze.getHeight() + 2 * scale);
+		
+		Dimension preferredSize = new Dimension(scale * drawingMaze.getWidth() + 2 * scale, scale
+				* drawingMaze.getHeight() + 2 * scale);
+		super.setPreferredSize(preferredSize);
 		initialize();
 	}
 
