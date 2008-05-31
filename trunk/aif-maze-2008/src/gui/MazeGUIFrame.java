@@ -22,7 +22,7 @@ public class MazeGUIFrame extends JFrame {
 	
 	final static long serialVersionUID = -432234234234L;
 	
-	private JPanel jPanel = null;
+	private JPanel jPanel = null;  //  @jve:decl-index=0:visual-constraint="10,55"
 	private JButton jbGenerate = null;
 	private MazePanel mazePanel = null;
 	private JLabel labelMessage = null;
@@ -63,7 +63,7 @@ public class MazeGUIFrame extends JFrame {
 	 * 
 	 */
 	private void initialize() {
-		this.setSize(new Dimension(451, 390));
+		this.setSize(new Dimension(486, 430));
 		this.setMaximumSize(new Dimension(451, 390));
 		this.setMinimumSize(new Dimension(451, 390));
 		this.setResizable(false);
@@ -96,6 +96,7 @@ public class MazeGUIFrame extends JFrame {
 			labelMessage.setHorizontalAlignment(SwingConstants.CENTER);
 			jPanel = new JPanel();
 			jPanel.setLayout(null);
+			jPanel.setSize(new Dimension(481, 366));
 			jPanel.add(getJbGenerate(), null);
 			jPanel.add(labelMessage, null);
 			jPanel.add(jLabelWidth, null);
@@ -121,10 +122,13 @@ public class MazeGUIFrame extends JFrame {
 			jbGenerate.setText("generate");
 			jbGenerate.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if(mazePanel!=null){jScrollPane.remove(mazePanel);}
-					mazePanel = null;
-					jScrollPane.setViewportView(getMazePanel());
+					if(mazePanel!=null){
+						jScrollPane.remove(mazePanel);
+						mazePanel = null;
+						jScrollPane.repaint();
+					}				
 					jbSolve.setEnabled(true);
+					jScrollPane.setViewportView(getMazePanel());
 					setMessage("Maze generated!");
 				}
 			});
@@ -243,7 +247,8 @@ public class MazeGUIFrame extends JFrame {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setBounds(new Rectangle(114, 28, 322, 325));
+			jScrollPane.setBounds(new Rectangle(141, 65, 324, 325));
+			jScrollPane.setMinimumSize(new Dimension(324, 325));
 			jScrollPane
 					.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		}
