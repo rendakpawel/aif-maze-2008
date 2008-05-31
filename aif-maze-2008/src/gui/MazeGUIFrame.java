@@ -42,7 +42,7 @@ public class MazeGUIFrame extends JFrame {
 	 * Biggest value for width and length of the maze. For very big numbers
 	 * computation can be very long.
 	 */
-	static int BIGGEST_VALUE = 101;
+	static int BIGGEST_VALUE = 257;
 
 	/**
 	 * Default value for width and height of the maze.
@@ -126,9 +126,11 @@ public class MazeGUIFrame extends JFrame {
 						jScrollPane.remove(mazePanel);
 						mazePanel = null;
 						jScrollPane.repaint();
+						jScrollPane.invalidate();
 					}				
 					jbSolve.setEnabled(true);
 					jScrollPane.setViewportView(getMazePanel());
+					jScrollPane.repaint();
 					setMessage("Maze generated!");
 				}
 			});
@@ -150,7 +152,6 @@ public class MazeGUIFrame extends JFrame {
 			mazePanel.setVisible(true);
 			mazePanel.setBounds(new Rectangle(125, 25, mazePanel.getWidth(),
 					mazePanel.getHeight()));
-			// mazePanel.repaint();
 		}
 		return mazePanel;
 	}
@@ -269,6 +270,7 @@ public class MazeGUIFrame extends JFrame {
 			jbSolve.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					mazePanel.drawSolveMaze();
+					jScrollPane.repaint();
 					setMessage("Maze solved!");
 				}
 			});
