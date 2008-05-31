@@ -1,15 +1,17 @@
 package gui;
 
-import javax.swing.JFrame;
 import java.awt.Dimension;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import java.awt.Rectangle;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
+import java.awt.Font;
 import java.awt.Point;
+import java.awt.Rectangle;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 /**
  * Frame which provides setting basic parameters for MazePanel
@@ -63,9 +65,7 @@ public class MazeGUIFrame extends JFrame {
 	 * 
 	 */
 	private void initialize() {
-		this.setSize(new Dimension(486, 430));
-		this.setMaximumSize(new Dimension(451, 390));
-		this.setMinimumSize(new Dimension(451, 390));
+		this.setSize(new Dimension(585, 483));
 		this.setResizable(false);
 		this.setTitle("AiF 2008 Maze Barcikowski & Rendak");
 		this.setLocation(new Point(100, 50));
@@ -82,18 +82,18 @@ public class MazeGUIFrame extends JFrame {
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			jLabelHeight = new JLabel();
-			jLabelHeight.setBounds(new Rectangle(12, 72, 42, 21));
-			jLabelHeight.setText("height:");
-			jLabelHeight.setHorizontalAlignment(SwingConstants.CENTER);
+			jLabelHeight.setBounds(new Rectangle(141, 10, 70, 20));
+			jLabelHeight.setText("Height:");
+			jLabelHeight.setHorizontalAlignment(SwingConstants.LEFT);
 			jLabelWidth = new JLabel();
-			jLabelWidth.setBounds(new Rectangle(11, 45, 43, 26));
-			jLabelWidth.setText("width:");
-			jLabelWidth.setHorizontalAlignment(SwingConstants.CENTER);
+			jLabelWidth.setBounds(new Rectangle(10, 10, 70, 20));
+			jLabelWidth.setText("Width:");
+			jLabelWidth.setHorizontalAlignment(SwingConstants.LEFT);
 			labelMessage = new JLabel();
 			labelMessage.setText("Please press \"generate\" to start");
-			labelMessage.setSize(new Dimension(388, 25));
-			labelMessage.setLocation(new Point(25, 1));
-			labelMessage.setHorizontalAlignment(SwingConstants.CENTER);
+			labelMessage.setSize(new Dimension(286, 20));
+			labelMessage.setLocation(new Point(284, 10));
+			labelMessage.setHorizontalAlignment(SwingConstants.RIGHT);
 			jPanel = new JPanel();
 			jPanel.setLayout(null);
 			jPanel.setSize(new Dimension(481, 366));
@@ -117,9 +117,9 @@ public class MazeGUIFrame extends JFrame {
 	private JButton getJbGenerate() {
 		if (jbGenerate == null) {
 			jbGenerate = new JButton();
-			jbGenerate.setBounds(new Rectangle(12, 104, 91, 35));
-			jbGenerate.setHorizontalAlignment(SwingConstants.LEADING);
-			jbGenerate.setText("generate");
+			jbGenerate.setBounds(new Rectangle(10, 420, 277, 25));
+			jbGenerate.setHorizontalAlignment(SwingConstants.CENTER);
+			jbGenerate.setText("Generate");
 			jbGenerate.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if(mazePanel!=null){
@@ -150,7 +150,7 @@ public class MazeGUIFrame extends JFrame {
 			mazePanel.generateMaze();
 			mazePanel.drawGeneratedMaze();
 			mazePanel.setVisible(true);
-			mazePanel.setBounds(new Rectangle(125, 25, mazePanel.getWidth(),
+			mazePanel.setBounds(new Rectangle(0, 0, mazePanel.getWidth(),
 					mazePanel.getHeight()));
 		}
 		return mazePanel;
@@ -165,7 +165,7 @@ public class MazeGUIFrame extends JFrame {
 		if (jtfWidth == null) {
 			jtfWidth = new JTextField();
 			jtfWidth.setHorizontalAlignment(JTextField.CENTER);
-			jtfWidth.setLocation(new Point(58, 48));
+			jtfWidth.setLocation(new Point(80, 10));
 			jtfWidth.setSize(new Dimension(35, 20));
 			jtfWidth.setText(Integer.toString(DEFAULT_VALUE));
 		}
@@ -181,7 +181,7 @@ public class MazeGUIFrame extends JFrame {
 		if (jtfHeight == null) {
 			jtfHeight = new JTextField();
 			jtfHeight.setHorizontalAlignment(JTextField.CENTER);
-			jtfHeight.setLocation(new Point(58, 71));
+			jtfHeight.setLocation(new Point(210, 10));
 			jtfHeight.setSize(new Dimension(35, 20));
 			jtfHeight.setText(Integer.toString(DEFAULT_VALUE));
 		}
@@ -248,7 +248,7 @@ public class MazeGUIFrame extends JFrame {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setBounds(new Rectangle(141, 65, 324, 325));
+			jScrollPane.setBounds(new Rectangle(10, 35, 560, 380));
 			jScrollPane.setMinimumSize(new Dimension(324, 325));
 			jScrollPane
 					.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -264,9 +264,9 @@ public class MazeGUIFrame extends JFrame {
 	private JButton getJbSolve() {
 		if (jbSolve == null) {
 			jbSolve = new JButton();
-			jbSolve.setBounds(new Rectangle(13, 164, 91, 35));
+			jbSolve.setBounds(new Rectangle(293, 420, 277, 25));
 			jbSolve.setEnabled(false);
-			jbSolve.setText("solve");
+			jbSolve.setText("Solve");
 			jbSolve.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					mazePanel.drawSolveMaze();
@@ -278,4 +278,4 @@ public class MazeGUIFrame extends JFrame {
 		return jbSolve;
 	}
 
-} // @jve:decl-index=0:visual-constraint="10,10"
+}  //  @jve:decl-index=0:visual-constraint="157,0"

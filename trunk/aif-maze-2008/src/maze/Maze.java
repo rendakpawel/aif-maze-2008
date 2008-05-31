@@ -437,7 +437,7 @@ public class Maze extends Board {
 
 	/**
 	 * Provides a unique key for given coordinates. Accepted value range is
-	 * (1,999).
+	 * (1,9999).
 	 * 
 	 * @param x
 	 *            X coordinate.
