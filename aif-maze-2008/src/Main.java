@@ -1,13 +1,4 @@
-import java.awt.Point;
-import java.util.Stack;
-
-import maze.Maze;
-import exceptions.CellsAreNotNeighborsException;
-import exceptions.MazeNotGeneratedException;
-import exceptions.OutOfBoardException;
-import gui.MazeFrame;
-
-
+import gui.MazeGUIFrame;
 
 public class Main {
 
@@ -20,33 +11,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 			
-		
-		Maze maze = new Maze(10,10);
-		maze.setDebugMode(false);
-		
-		MazeFrame window = new MazeFrame(maze);
+		MazeGUIFrame window = new MazeGUIFrame();
 		window.setVisible(true);
-		
-		try {
-			maze.generateMaze();
-		} catch (CellsAreNotNeighborsException e) {
-			System.err.println("[Algorithm error] Generation tried to operate on non-neighboring cells!");
-		} catch (OutOfBoardException e) {
-			System.err.println("[Algorithm error] Generation went out of board range!");
-		}
-		
-		maze.printMaze();
-	
-		try {
-			Stack<Point> mazeSolution = maze.solveMaze();
-			System.out.println("\nSolution (" + mazeSolution.size() + " steps):\n");
-			Point point; 
-			for (int i = mazeSolution.size(); i > 0; i--) {
-				point = mazeSolution.pop();
-				System.out.println("Go to [" + point.x + "," + point.y + "]");
-			}
-		} catch (MazeNotGeneratedException e) {
-			System.err.println("The maze cannot be solved because it hasn't been generated yet!");
-		}
 	}
 }

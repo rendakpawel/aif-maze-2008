@@ -11,82 +11,84 @@ import exceptions.MazeNotGeneratedException;
 import exceptions.OutOfBoardException;
 
 /**
- * This class is an extension of Board class
- * and provides functionality connected with 
- * using Board as a maze.
- * New instance of maze automatically generates 
- * new maze by removing properly random generated 
- * walls.
+ * This class is an extension of Board class and provides functionality
+ * connected with using Board as a maze. New instance of maze automatically
+ * generates new maze by removing properly random generated walls.
  * 
  * @author £ukasz Barcikowski
  */
 public class Maze extends Board {
-	
+
 	/**
-	 * Indicates if maze is in debug mode.
-	 * If yes generation and solving processes 
-	 * will be displayed in standard output.
-	 * By default debug mode is false.
+	 * Smallest value for width and length of the maze.
+	 */
+	static int SMALLEST_VALUE = 2;
+
+	/**
+	 * Biggest value for width and length of the maze. Changing it to bigger
+	 * causes additional changes in key generation and resolving.
+	 */
+	static int BIGGEST_VALUE = 9999;
+
+	/**
+	 * Indicates if maze is in debug mode. If yes generation and solving
+	 * processes will be displayed in standard output. By default debug mode is
+	 * false.
 	 */
 	private boolean debugMode = false;
-	
+
 	/**
-	 * Indicates whether maze has been generated or
-	 * is still a clean board.
+	 * Indicates whether maze has been generated or is still a clean board.
 	 */
-	private boolean isGenerated = false;
-	
+	public boolean isGenerated = false;
+
 	/**
 	 * Contains information on cells visited my sprite.
 	 */
 	private Stack<Integer> mySolution;
-	
+
 	/**
-	 * This field is used for generating the maze.
-	 * It holds information on visited cells which have
-	 * been "used" in generation process. 
+	 * This field is used for generating the maze. It holds information on
+	 * visited cells which have been "used" in generation process.
 	 */
 	private List<Integer> visitedCells;
-	
+
 	/**
 	 * Stack used by generation algorithm.
 	 */
 	private Stack<Integer> generationStack;
-	
+
 	/**
-	 * Key identifying entry coordinates.
-	 * Key is of form XXXXYYYY, where
-	 * XXXX is x coordinate and YYYY is y
-	 * coordinate. For generating and parsed
-	 * bye getKey() and parseKey() methods.
+	 * Key identifying entry coordinates. Key is of form XXXXYYYY, where XXXX is
+	 * x coordinate and YYYY is y coordinate. For generating and parsed bye
+	 * getKey() and parseKey() methods.
 	 */
 	private int myEntry;
-	
+
 	/**
-	 * Key identifying exit coordinates.
-	 * Key is of form XXXXYYYY, where
-	 * XXXX is x coordinate and YYYY is y
-	 * coordinate. For generating and parsed
-	 * bye getKey() and parseKey() methods.
+	 * Key identifying exit coordinates. Key is of form XXXXYYYY, where XXXX is
+	 * x coordinate and YYYY is y coordinate. For generating and parsed bye
+	 * getKey() and parseKey() methods.
 	 */
 	private int myExit;
-	
+
 	/**
-	 * X coordinate of sprite.
-	 * Used for debug purposes.
+	 * X coordinate of sprite. Used for debug purposes.
 	 */
 	private int spriteX = 0;
-	
+
 	/**
-	 * Y coordinate of sprite.
-	 * Used for debug purposes.
+	 * Y coordinate of sprite. Used for debug purposes.
 	 */
 	private int spriteY = 0;
-	
+
 	/**
 	 * Generates new maze basing on new Board.
-	 * @param width Width of maze board.
-	 * @param height Height of maze board.
+	 * 
+	 * @param width
+	 *            Width of maze board.
+	 * @param height
+	 *            Height of maze board.
 	 */
 	public Maze(int width, int height) {
 		super(width, height);
@@ -94,17 +96,20 @@ public class Maze extends Board {
 		this.visitedCells = new Vector<Integer>();
 		this.mySolution = new Stack<Integer>();
 	}
-	
+
 	/**
-	 * This is one of the most important methods. It generates
-	 * the maze by removing specific walls from the preset board
-	 * using so called stack based algorithm.
+	 * This is one of the most important methods. It generates the maze by
+	 * removing specific walls from the preset board using so called stack based
+	 * algorithm.
 	 * 
-	 * @throws CellsAreNotNeighborsException Thrown when generation 
-	 * tries to operate on non-neighboring cells.
-	 * @throws OutOfBoardException Thrown when generation exceeds board.
+	 * @throws CellsAreNotNeighborsException
+	 *             Thrown when generation tries to operate on non-neighboring
+	 *             cells.
+	 * @throws OutOfBoardException
+	 *             Thrown when generation exceeds board.
 	 */
-	public void generateMaze() throws CellsAreNotNeighborsException, OutOfBoardException {
+	public void generateMaze() throws CellsAreNotNeighborsException,
+			OutOfBoardException {
 		if (!this.isGenerated) {
 			if (this.debugMode)
 				System.out.println("Starting maze generation...");
@@ -112,9 +117,8 @@ public class Maze extends Board {
 			if (this.debugMode)
 				System.out.println("Starting first junction...");
 			/*
-			 * Selecting random cell from which the
-			 * generation of the maze shell start and
-			 * its random neighbor.
+			 * Selecting random cell from which the generation of the maze shell
+			 * start and its random neighbor.
 			 */
 			int currentX = rnd.nextInt(this.myWidth - 1) + 1;
 			int currentY = rnd.nextInt(this.myHeight - 1) + 1;
@@ -136,11 +140,10 @@ public class Maze extends Board {
 				/*
 				 * Checking for unvisited neighbors.
 				 * 
-				 * Case 1:
-				 * If there are some unvisited neighbors get random unvisited 
-				 * neighboring cell, then destroy wall between current cell
-				 * and newly selected one and switch current to it. 
-				 * New cell is added to list of visited cells and pushed onto stack.
+				 * Case 1: If there are some unvisited neighbors get random
+				 * unvisited neighboring cell, then destroy wall between current
+				 * cell and newly selected one and switch current to it. New
+				 * cell is added to list of visited cells and pushed onto stack.
 				 */
 				if (this.hasUnvisitedNeighbors(currentX, currentY)) {
 					int tmpNeighbor;
@@ -169,10 +172,9 @@ public class Maze extends Board {
 								+ currentY + "]");
 				}
 				/*
-				 * Case 2:
-				 * If there are no unvisited neighbors backtrack the stack until
-				 * some cell with unvisited neighbors is found and proceed with case 1
-				 * from new junction.
+				 * Case 2: If there are no unvisited neighbors backtrack the
+				 * stack until some cell with unvisited neighbors is found and
+				 * proceed with case 1 from new junction.
 				 */
 				else {
 					if (this.debugMode) {
@@ -202,11 +204,10 @@ public class Maze extends Board {
 			this.isGenerated = true;
 		}
 	}
-	
+
 	/**
-	 * This method sets entry and exit points on 
-	 * outer bounds of maze board. Each of selected
-	 * cells is selected on different wall.
+	 * This method sets entry and exit points on outer bounds of maze board.
+	 * Each of selected cells is selected on different wall.
 	 */
 	private void chooseExits() {
 		Random rnd = new Random();
@@ -214,54 +215,58 @@ public class Maze extends Board {
 		int exitWall;
 		do {
 			exitWall = rnd.nextInt(4);
-		} while(exitWall == entryWall);
-		
+		} while (exitWall == entryWall);
+
 		try {
 			// North wall
-			if(entryWall == 0) {
-				this.myEntry = this.getKey(rnd.nextInt(this.myWidth) + 1,1);
+			if (entryWall == 0) {
+				this.myEntry = this.getKey(rnd.nextInt(this.myWidth) + 1, 1);
 				int[] entry = parseKey(this.myEntry);
 				this.setNorthWall(entry[0], entry[1], false);
 			}
 			// East wall
-			else if(entryWall == 1) {
-				this.myEntry = this.getKey(this.myWidth, rnd.nextInt(this.myHeight) + 1);
+			else if (entryWall == 1) {
+				this.myEntry = this.getKey(this.myWidth, rnd
+						.nextInt(this.myHeight) + 1);
 				int[] entry = parseKey(this.myEntry);
 				this.setEastWall(entry[0], entry[1], false);
 			}
 			// South wall
-			else if(entryWall == 2) {
-				this.myEntry = this.getKey(rnd.nextInt(this.myWidth) + 1, this.myHeight);
+			else if (entryWall == 2) {
+				this.myEntry = this.getKey(rnd.nextInt(this.myWidth) + 1,
+						this.myHeight);
 				int[] entry = parseKey(this.myEntry);
 				this.setSouthWall(entry[0], entry[1], false);
 			}
 			// West wall
-			else if(entryWall == 3) {
+			else if (entryWall == 3) {
 				this.myEntry = this.getKey(1, rnd.nextInt(this.myHeight) + 1);
 				int[] entry = parseKey(this.myEntry);
 				this.setWestWall(entry[0], entry[1], false);
 			}
-				
+
 			// North wall
-			if(exitWall == 0) {
-				this.myExit = this.getKey(rnd.nextInt(this.myWidth) + 1,1);
+			if (exitWall == 0) {
+				this.myExit = this.getKey(rnd.nextInt(this.myWidth) + 1, 1);
 				int[] exit = parseKey(this.myExit);
 				this.setNorthWall(exit[0], exit[1], false);
 			}
 			// East wall
-			else if(exitWall == 1) {
-				this.myExit = this.getKey(this.myWidth, rnd.nextInt(this.myHeight) + 1);
+			else if (exitWall == 1) {
+				this.myExit = this.getKey(this.myWidth, rnd
+						.nextInt(this.myHeight) + 1);
 				int[] exit = parseKey(this.myExit);
 				this.setEastWall(exit[0], exit[1], false);
 			}
 			// South wall
-			else if(exitWall == 2) {
-				this.myExit = this.getKey(rnd.nextInt(this.myWidth) + 1, this.myHeight);
+			else if (exitWall == 2) {
+				this.myExit = this.getKey(rnd.nextInt(this.myWidth) + 1,
+						this.myHeight);
 				int[] exit = parseKey(this.myExit);
 				this.setSouthWall(exit[0], exit[1], false);
 			}
 			// West wall
-			else if(exitWall == 3) {
+			else if (exitWall == 3) {
 				this.myExit = this.getKey(1, rnd.nextInt(this.myHeight) + 1);
 				int[] exit = parseKey(this.myExit);
 				this.setWestWall(exit[0], exit[1], false);
@@ -269,121 +274,155 @@ public class Maze extends Board {
 		} catch (OutOfBoardException e) {
 			System.err.println("Exit chosen out of board range!");
 		}
-		
+
 	}
-	
+
 	/**
-	 * This method allows to check if provided cell
-	 * has some yet unvisited neighbors.
-	 * @param x X coordinate for cell to be checked.
-	 * @param y Y coordinate for cell to be checked.
+	 * This method allows to check if provided cell has some yet unvisited
+	 * neighbors.
+	 * 
+	 * @param x
+	 *            X coordinate for cell to be checked.
+	 * @param y
+	 *            Y coordinate for cell to be checked.
 	 * @return True if there are some unvisited neighbors, false otherwise.
 	 */
 	private boolean hasUnvisitedNeighbors(int x, int y) {
 		int[] neighbors = new int[4];
 		boolean[] possibleDirections = new boolean[4];
-		for(int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 			possibleDirections[i] = true;
-		
+
 		// North neighbor
-		if(y == 1) possibleDirections[0] = false; 
+		if (y == 1)
+			possibleDirections[0] = false;
 		neighbors[0] = this.getKey(x, y - 1);
 		// East neighbor
-		if(x == this.myWidth) possibleDirections[1] = false; 
+		if (x == this.myWidth)
+			possibleDirections[1] = false;
 		neighbors[1] = this.getKey(x + 1, y);
 		// South neighbor
-		if(y == this.myHeight) possibleDirections[2] = false; 
+		if (y == this.myHeight)
+			possibleDirections[2] = false;
 		neighbors[2] = this.getKey(x, y + 1);
 		// West neighbor
-		if(x == 1) possibleDirections[3] = false; 
+		if (x == 1)
+			possibleDirections[3] = false;
 		neighbors[3] = this.getKey(x - 1, y);
-		
-		for(int i = 0; i < 4; i++)
-			if(possibleDirections[i] && !this.visitedCells.contains(neighbors[i]))
+
+		for (int i = 0; i < 4; i++)
+			if (possibleDirections[i]
+					&& !this.visitedCells.contains(neighbors[i]))
 				return true;
-		
+
 		return false;
 	}
-	
+
 	/**
-	 * This method checks if there is wall set between two 
-	 * provided cells.
-	 * @param x1 X coordinate of first cell.
-	 * @param y1 Y coordinate of first cell.
-	 * @param x2 X coordinate of second cell.
-	 * @param y2 Y coordinate of second cell.
+	 * This method checks if there is wall set between two provided cells.
+	 * 
+	 * @param x1
+	 *            X coordinate of first cell.
+	 * @param y1
+	 *            Y coordinate of first cell.
+	 * @param x2
+	 *            X coordinate of second cell.
+	 * @param y2
+	 *            Y coordinate of second cell.
 	 * @return True if there is wall between provided cells, false otherwise.
-	 * @throws CellsAreNotNeighborsException Thrown if provided cells are not neighbors.
-	 * @throws OutOfBoardException Thrown if any of provided cells is outside the board.
+	 * @throws CellsAreNotNeighborsException
+	 *             Thrown if provided cells are not neighbors.
+	 * @throws OutOfBoardException
+	 *             Thrown if any of provided cells is outside the board.
 	 */
-	private boolean isWallBetweenCells(int x1,int y1,int x2,int y2) throws CellsAreNotNeighborsException, OutOfBoardException {
-		if(Math.abs(x2 - x1) > 1 || Math.abs(y2 - y1) > 1 || (Math.abs(x2 - x1) == 1 && Math.abs(y2 - y1) == 1))
+	private boolean isWallBetweenCells(int x1, int y1, int x2, int y2)
+			throws CellsAreNotNeighborsException, OutOfBoardException {
+		if (Math.abs(x2 - x1) > 1 || Math.abs(y2 - y1) > 1
+				|| (Math.abs(x2 - x1) == 1 && Math.abs(y2 - y1) == 1))
 			throw new CellsAreNotNeighborsException();
 		try {
-			if(x2 > x1)
+			if (x2 > x1)
 				return this.getEastWall(x1, y1);
-			else if(x2 < x1)
+			else if (x2 < x1)
 				return this.getWestWall(x1, y1);
-			else if(y1 < y2)
+			else if (y1 < y2)
 				return this.getSouthWall(x1, y1);
 			else
 				return this.getNorthWall(x1, y1);
 		} catch (OutOfBoardException e) {
 			throw new OutOfBoardException();
-		}		
+		}
 	}
-	
+
 	/**
 	 * Sets the wall between two provided cells.
-	 * @param x1 X coordinate of first cell.
-	 * @param y1 Y coordinate of first cell.
-	 * @param x2 X coordinate of second cell.
-	 * @param y2 Y coordinate of second cell.
-	 * @param exists Desired state of the wall.
-	 * @throws CellsAreNotNeighborsException Thrown if provided cells are not neighbors.
-	 * @throws OutOfBoardException Thrown if any of provided cells is outside the board.
+	 * 
+	 * @param x1
+	 *            X coordinate of first cell.
+	 * @param y1
+	 *            Y coordinate of first cell.
+	 * @param x2
+	 *            X coordinate of second cell.
+	 * @param y2
+	 *            Y coordinate of second cell.
+	 * @param exists
+	 *            Desired state of the wall.
+	 * @throws CellsAreNotNeighborsException
+	 *             Thrown if provided cells are not neighbors.
+	 * @throws OutOfBoardException
+	 *             Thrown if any of provided cells is outside the board.
 	 */
-	private void setWallBetweenCells(int x1,int y1,int x2,int y2, boolean exists) throws CellsAreNotNeighborsException, OutOfBoardException {
-		if(Math.abs(x2 - x1) > 1 || Math.abs(y2 - y1) > 1 || (Math.abs(x2 - x1) == 1 && Math.abs(y2 - y1) == 1))
+	private void setWallBetweenCells(int x1, int y1, int x2, int y2,
+			boolean exists) throws CellsAreNotNeighborsException,
+			OutOfBoardException {
+		if (Math.abs(x2 - x1) > 1 || Math.abs(y2 - y1) > 1
+				|| (Math.abs(x2 - x1) == 1 && Math.abs(y2 - y1) == 1))
 			throw new CellsAreNotNeighborsException();
 		try {
-			if(x2 > x1)
+			if (x2 > x1)
 				this.setEastWall(x1, y1, exists);
-			else if(x2 < x1)
+			else if (x2 < x1)
 				this.setWestWall(x1, y1, exists);
-			else if(y1 < y2)
+			else if (y1 < y2)
 				this.setSouthWall(x1, y1, exists);
 			else
 				this.setNorthWall(x1, y1, exists);
 		} catch (OutOfBoardException e) {
 			throw new OutOfBoardException();
-		}	
+		}
 	}
-	
+
 	/**
-	 * Returns key representing the location of
-	 * randomly selected neighbor of provided cell.
-	 * @param x X coordinate of cell for which neighbor is to be selected.
-	 * @param y Y coordinate of cell for which neighbor is to be selected.
+	 * Returns key representing the location of randomly selected neighbor of
+	 * provided cell.
+	 * 
+	 * @param x
+	 *            X coordinate of cell for which neighbor is to be selected.
+	 * @param y
+	 *            Y coordinate of cell for which neighbor is to be selected.
 	 * @return Location of neighbor as location key.
 	 */
 	private int getRandomNeighbor(int x, int y) {
 		Random rnd = new Random();
 		boolean[] possibleDirections = new boolean[4];
-		for(int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 			possibleDirections[i] = true;
-		
-		if(y == 1) possibleDirections[0] = false; // top wall
-		if(x == this.myWidth) possibleDirections[1] = false; // right wall
-		if(y == this.myHeight) possibleDirections[2] = false; // bottom wall
-		if(x == 1) possibleDirections[3] = false; // left wall
-		
+
+		if (y == 1)
+			possibleDirections[0] = false; // top wall
+		if (x == this.myWidth)
+			possibleDirections[1] = false; // right wall
+		if (y == this.myHeight)
+			possibleDirections[2] = false; // bottom wall
+		if (x == 1)
+			possibleDirections[3] = false; // left wall
+
 		int direction;
 		do {
 			direction = rnd.nextInt(4);
-		} while(!possibleDirections[direction]);
-		
-		switch(direction) {
+		} while (!possibleDirections[direction]);
+
+		switch (direction) {
 		case 0:
 			return this.getKey(x, y - 1);
 		case 1:
@@ -395,21 +434,26 @@ public class Maze extends Board {
 		}
 		return -1;
 	}
-	
+
 	/**
-	 * Provides a unique key for given coordinates.
-	 * Accepted value range is (1,999).
-	 * @param x X coordinate.
-	 * @param y Y coordinate.
+	 * Provides a unique key for given coordinates. Accepted value range is
+	 * (1,999).
+	 * 
+	 * @param x
+	 *            X coordinate.
+	 * @param y
+	 *            Y coordinate.
 	 * @return Unique key.
 	 */
-	private int getKey(int x,int y) {
+	private int getKey(int x, int y) {
 		return x * 10000 + y;
 	}
-	
+
 	/**
 	 * Parses a unique key for given coordinates.
-	 * @param key Key to be parsed.
+	 * 
+	 * @param key
+	 *            Key to be parsed.
 	 * @return Array of two integers [0] - x coordinate and [1] - y coordinate.
 	 */
 	private int[] parseKey(int key) {
@@ -420,79 +464,77 @@ public class Maze extends Board {
 		coordinates[1] = y;
 		return coordinates;
 	}
-	
+
 	/**
-	 * Prints to standard output the maze 
-	 * with (if any) actual location of the sprite.
+	 * Prints to standard output the maze with (if any) actual location of the
+	 * sprite.
 	 */
 	public void printMaze() {
 		try {
-			
-			for(int i = 1; i <= this.myWidth; i++)
-				if(this.getNorthWall(i, 1)) {
+
+			for (int i = 1; i <= this.myWidth; i++)
+				if (this.getNorthWall(i, 1)) {
 					System.out.print(" _");
-				}
-				else {
+				} else {
 					System.out.print("  ");
 				}
-					
-			
+
 			System.out.print("\n");
-			
-			for(int j = 1; j <= this.myHeight; j++) {
-				for(int i = 1; i <= this.myWidth; i++) {
-		
-					if(spriteX == i && spriteY == j) {
+
+			for (int j = 1; j <= this.myHeight; j++) {
+				for (int i = 1; i <= this.myWidth; i++) {
+
+					if (spriteX == i && spriteY == j) {
 						System.out.print(" *");
 						continue;
 					}
-						
-					if(this.getWestWall(i, j)) {
+
+					if (this.getWestWall(i, j)) {
 						System.out.print("|");
-					}
-					else {
+					} else {
 						System.out.print(" ");
 					}
-					
-					if(this.getSouthWall(i, j) && i < this.myWidth) {
+
+					if (this.getSouthWall(i, j) && i < this.myWidth) {
 						System.out.print("_");
 					}
 
-					else if(i == this.myWidth && this.getEastWall(i, j) && this.getSouthWall(i, j)) {
+					else if (i == this.myWidth && this.getEastWall(i, j)
+							&& this.getSouthWall(i, j)) {
 						System.out.print("_|");
-					}
-					else if(i == this.myWidth && this.getEastWall(i, j) && !this.getSouthWall(i, j)) {
+					} else if (i == this.myWidth && this.getEastWall(i, j)
+							&& !this.getSouthWall(i, j)) {
 						System.out.print(" |");
-					}
-					else if(i == this.myWidth && !this.getEastWall(i, j) && this.getSouthWall(i, j)) {
+					} else if (i == this.myWidth && !this.getEastWall(i, j)
+							&& this.getSouthWall(i, j)) {
 						System.out.print("_ ");
-					}
-					else if(i == this.myWidth && !this.getEastWall(i, j) && !this.getSouthWall(i, j)) {
+					} else if (i == this.myWidth && !this.getEastWall(i, j)
+							&& !this.getSouthWall(i, j)) {
 						System.out.print("  ");
 					}
-					
+
 					else {
 						System.out.print(" ");
 					}
 				}
-				
+
 				System.out.print("\n");
 			}
 		} catch (OutOfBoardException e) {
 			System.err.println("Printing went out of range!");
 		}
 	}
-	
+
 	/**
-	 * Solves the maze using so called right hand rule.
-	 * The way out is registered on a solution stack.
+	 * Solves the maze using so called right hand rule. The way out is
+	 * registered on a solution stack.
 	 * 
-	 * Returns the solution of the maze as a stack
-	 * of Points starting from exit (top of stack)
-	 * to entry (bottom of the stack).
+	 * Returns the solution of the maze as a stack of Points starting from exit
+	 * (top of stack) to entry (bottom of the stack).
 	 * 
 	 * @return Stack of point coordinates representing solution.
-	 * @throws MazeNotGeneratedException Thrown when maze hasn't been generated yet.
+	 * @throws MazeNotGeneratedException
+	 *             Thrown when maze hasn't been generated yet.
 	 */
 	public Stack<Point> solveMaze() throws MazeNotGeneratedException {
 		if (this.isGenerated) {
@@ -502,11 +544,7 @@ public class Maze extends Board {
 			int currentX = start[0];
 			int currentY = start[1];
 			/*
-			 * Directions:
-			 * 0 - North
-			 * 1 - East
-			 * 2 - South
-			 * 3 - West
+			 * Directions: 0 - North 1 - East 2 - South 3 - West
 			 */
 			int direction = 1;
 			if (currentX == this.myWidth)
@@ -532,11 +570,13 @@ public class Maze extends Board {
 				}
 				this.spriteX = currentX;
 				this.spriteY = currentY;
-				if(this.debugMode) this.printMaze();
+				if (this.debugMode)
+					this.printMaze();
 				try {
 					// Sprite directed north
 					if (direction == 0 && !this.getEastWall(currentX, currentY)) {
-						if(this.getKey(currentX, currentY) == this.getKey(end[0],end[1])) { 
+						if (this.getKey(currentX, currentY) == this.getKey(
+								end[0], end[1])) {
 							int currentKey = this.getKey(currentX, currentY);
 							this.mySolution.push(currentKey);
 							break;
@@ -556,7 +596,8 @@ public class Maze extends Board {
 					// Sprite directed east
 					if (direction == 1
 							&& !this.getSouthWall(currentX, currentY)) {
-						if(this.getKey(currentX, currentY) == this.getKey(end[0],end[1])) { 
+						if (this.getKey(currentX, currentY) == this.getKey(
+								end[0], end[1])) {
 							int currentKey = this.getKey(currentX, currentY);
 							this.mySolution.push(currentKey);
 							break;
@@ -575,7 +616,8 @@ public class Maze extends Board {
 
 					// Sprite directed south
 					if (direction == 2 && !this.getWestWall(currentX, currentY)) {
-						if(this.getKey(currentX, currentY) == this.getKey(end[0],end[1])) { 
+						if (this.getKey(currentX, currentY) == this.getKey(
+								end[0], end[1])) {
 							int currentKey = this.getKey(currentX, currentY);
 							this.mySolution.push(currentKey);
 							break;
@@ -595,7 +637,8 @@ public class Maze extends Board {
 					// Sprite directed west
 					if (direction == 3
 							&& !this.getNorthWall(currentX, currentY)) {
-						if(this.getKey(currentX, currentY) == this.getKey(end[0],end[1])) { 
+						if (this.getKey(currentX, currentY) == this.getKey(
+								end[0], end[1])) {
 							int currentKey = this.getKey(currentX, currentY);
 							this.mySolution.push(currentKey);
 							break;
@@ -623,51 +666,54 @@ public class Maze extends Board {
 		}
 		throw new MazeNotGeneratedException();
 	}
-	
+
 	/**
-	 * Returns the solution of the maze as a stack
-	 * of Points starting from exit (bottom of stack)
-	 * to entry (top of the stack).
-	 * After calling this function solution is lost.
+	 * Returns the solution of the maze as a stack of Points starting from exit
+	 * (bottom of stack) to entry (top of the stack). After calling this
+	 * function solution is lost.
+	 * 
 	 * @return Solution back trace stack.
 	 */
 	private Stack<Point> getSolution() {
 		Stack<Point> solution = new Stack<Point>();
-		for(int i = this.mySolution.size(); i > 0; i--) {			
+		for (int i = this.mySolution.size(); i > 0; i--) {
 			int key = this.mySolution.pop();
 			int[] coords = this.parseKey(key);
-			solution.push(new Point(coords[0],coords[1]));
+			solution.push(new Point(coords[0], coords[1]));
 		}
 		return solution;
 	}
-	
+
 	/**
 	 * Returns coordinates of entry point of the maze.
+	 * 
 	 * @returnArray of two integers [0] - x coordinate and [1] - y coordinate.
 	 */
 	public int[] getEntry() {
-		return this.parseKey(this.myEntry);	
+		return this.parseKey(this.myEntry);
 	}
-	
+
 	/**
 	 * Returns coordinates of exit point of the maze.
+	 * 
 	 * @return Array of two integers [0] - x coordinate and [1] - y coordinate.
 	 */
 	public int[] getExit() {
 		return this.parseKey(this.myExit);
 	}
-	
+
 	/**
-	 * Sets the debug mode on or off.
-	 * If debug mode is on (true) generation and solving processes 
-	 * will be traced by printing proper info to
-	 * standard output.
-	 * @param isOn Debug mode.
+	 * Sets the debug mode on or off. If debug mode is on (true) generation and
+	 * solving processes will be traced by printing proper info to standard
+	 * output.
+	 * 
+	 * @param isOn
+	 *            Debug mode.
 	 */
 	public void setDebugMode(boolean isOn) {
 		this.debugMode = isOn;
 	}
-	
+
 	/**
 	 * Resets the maze to initial state.
 	 */
@@ -678,12 +724,10 @@ public class Maze extends Board {
 		this.isGenerated = false;
 		this.mySolution = new Stack<Integer>();
 	}
-	
+
 	/**
-	 * Optimizes solution by removing
-	 * double visited cells.
-	 * (i.e. all those sequences where sprite
-	 * reached dead end and went back to some point)
+	 * Optimizes solution by removing double visited cells. (i.e. all those
+	 * sequences where sprite reached dead end and went back to some point)
 	 */
 	private void optimizeSolution() {
 		Stack<Integer> temp = new Stack<Integer>();
@@ -699,26 +743,30 @@ public class Maze extends Board {
 		}
 		this.mySolution = temp;
 	}
-	
+
 	/**
-	 * Locks entry point for generation process, so that
-	 * sprite wouldn't go outside the board.
+	 * Locks entry point for generation process, so that sprite wouldn't go
+	 * outside the board.
 	 */
 	private void lockEntry() {
 		int[] entry = this.parseKey(this.myEntry);
 		int x = entry[0];
 		int y = entry[1];
-		
+
 		try {
-			if(x == 1) this.setWestWall(x, y, true);
-			if(y == 1) this.setNorthWall(x, y, true);
-			if(x == this.myWidth) this.setEastWall(x, y, true);
-			if(y == this.myHeight) this.setSouthWall(x, y, true);
+			if (x == 1)
+				this.setWestWall(x, y, true);
+			if (y == 1)
+				this.setNorthWall(x, y, true);
+			if (x == this.myWidth)
+				this.setEastWall(x, y, true);
+			if (y == this.myHeight)
+				this.setSouthWall(x, y, true);
 		} catch (OutOfBoardException e) {
 			System.err.println("Cannot lock walls outside board!");
 		}
 	}
-	
+
 	/**
 	 * Reopens the entry point.
 	 */
@@ -726,27 +774,27 @@ public class Maze extends Board {
 		int[] entry = this.parseKey(this.myEntry);
 		int x = entry[0];
 		int y = entry[1];
-		
+
 		try {
-			if(x == 1) {
+			if (x == 1) {
 				this.setWestWall(x, y, false);
 				return;
 			}
-			if(y == 1) {
+			if (y == 1) {
 				this.setNorthWall(x, y, false);
 				return;
 			}
-			if(x == this.myWidth) {
+			if (x == this.myWidth) {
 				this.setEastWall(x, y, false);
 				return;
 			}
-			if(y == this.myHeight) {
+			if (y == this.myHeight) {
 				this.setSouthWall(x, y, false);
 				return;
 			}
 		} catch (OutOfBoardException e) {
 			System.err.println("Cannot lock walls outside board!");
 		}
-	}	
-	
+	}
+
 }

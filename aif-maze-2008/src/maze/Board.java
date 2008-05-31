@@ -12,16 +12,36 @@ import exceptions.OutOfBoardException;
  */
 public class Board {
 
+	
+	
 	/**
 	 * Boolean representation of vertical walls of the grid.
 	 */
 	private boolean[][] verticalWalls;
-
+	
+	/**
+	 * Gets vertical walls, it is used by MazePanel 
+	 * for drawing those walls.
+	 * @return Two dimension array representing vertical walls.  
+	 */
+	public boolean[][] getVerticalWalls(){ 
+		return verticalWalls;
+	}
+	
 	/**
 	 * Boolean representation of vertical walls of the grid.
 	 */
 	private boolean[][] horizontalWalls;
 
+	/**
+	 * Gets horizontal walls, it is used by MazePanel 
+	 * for drawing those walls.
+	 * @return Two dimension array representing horizontal walls.  
+	 */
+	public boolean[][] getHorizontalWalls(){ 
+		return horizontalWalls;
+	}
+	
 	/**
 	 * The width of the grid.
 	 */
