@@ -5,7 +5,8 @@ import maze.Maze;
 import exceptions.CellsAreNotNeighborsException;
 import exceptions.MazeNotGeneratedException;
 import exceptions.OutOfBoardException;
-import gui.ProjectFrame;
+import gui.MazeFrame;
+
 
 
 public class Main {
@@ -19,7 +20,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
-		ProjectFrame window = new ProjectFrame();
+		MazeFrame window = new MazeFrame();
 		window.setVisible(true);
 		
 		Maze maze = new Maze(10,10);

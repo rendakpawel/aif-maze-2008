@@ -1,11 +1,9 @@
 package maze;
+
 import exceptions.OutOfBoardException;
 
-
-
 /**
- * This class represents a board that has
- * functionality of handling it's walls
+ * This class represents a board that has functionality of handling it's walls
  * (i.e. enabling or disabling walls).
  * 
  * @author £ukasz Barcikowski
@@ -37,8 +35,10 @@ public class Board {
 	/**
 	 * Initializes the board by creating new grid and filling it with blocks.
 	 * 
-	 * @param width Width of the board.
-	 * @param height Height of the board.
+	 * @param width
+	 *            Width of the board.
+	 * @param height
+	 *            Height of the board.
 	 */
 	public Board(int width, int height) {
 
@@ -58,10 +58,13 @@ public class Board {
 	/**
 	 * Checks the existence of east wall of the cell with coordinates (x,y).
 	 * 
-	 * @param x X coordinate of the cell.
-	 * @param y Y coordinate of the cell.
+	 * @param x
+	 *            X coordinate of the cell.
+	 * @param y
+	 *            Y coordinate of the cell.
 	 * @return True if wall exist, false otherwise.
-	 * @throws OutOfBoardException Occurs when desired cell does not belong to board.
+	 * @throws OutOfBoardException
+	 *             Occurs when desired cell does not belong to board.
 	 */
 	public boolean getEastWall(int x, int y) throws OutOfBoardException {
 		try {
@@ -71,16 +74,19 @@ public class Board {
 		} catch (NullPointerException e) {
 			throw new OutOfBoardException();
 		}
-		
+
 	}
 
 	/**
 	 * Checks the existence of west wall of the cell with coordinates (x,y).
 	 * 
-	 * @param x X coordinate of the cell.
-	 * @param y Y coordinate of the cell.
+	 * @param x
+	 *            X coordinate of the cell.
+	 * @param y
+	 *            Y coordinate of the cell.
 	 * @return True if wall exist, false otherwise.
-	 * @throws OutOfBoardException Occurs when desired cell does not belong to board.
+	 * @throws OutOfBoardException
+	 *             Occurs when desired cell does not belong to board.
 	 */
 	public boolean getWestWall(int x, int y) throws OutOfBoardException {
 		try {
@@ -95,10 +101,13 @@ public class Board {
 	/**
 	 * Checks the existence of north wall of the cell with coordinates (x,y).
 	 * 
-	 * @param x X coordinate of the cell.
-	 * @param y Y coordinate of the cell.
+	 * @param x
+	 *            X coordinate of the cell.
+	 * @param y
+	 *            Y coordinate of the cell.
 	 * @return True if wall exist, false otherwise.
-	 * @throws OutOfBoardException Occurs when desired cell does not belong to board.
+	 * @throws OutOfBoardException
+	 *             Occurs when desired cell does not belong to board.
 	 */
 	public boolean getNorthWall(int x, int y) throws OutOfBoardException {
 		try {
@@ -113,10 +122,13 @@ public class Board {
 	/**
 	 * Checks the existence of south wall of the cell with coordinates (x,y).
 	 * 
-	 * @param x X coordinate of the cell.
-	 * @param y Y coordinate of the cell.
+	 * @param x
+	 *            X coordinate of the cell.
+	 * @param y
+	 *            Y coordinate of the cell.
 	 * @return True if wall exist, false otherwise.
-	 * @throws OutOfBoardException Occurs when desired cell does not belong to board.
+	 * @throws OutOfBoardException
+	 *             Occurs when desired cell does not belong to board.
 	 */
 	public boolean getSouthWall(int x, int y) throws OutOfBoardException {
 		try {
@@ -129,15 +141,20 @@ public class Board {
 	}
 
 	/**
-	 * Sets given wall to existing or non existing state.
-	 * Value "true" indicates that wall exist, "false" means
-	 * that there is no wall present.
-	 * @param x X coordinate of the cell.
-	 * @param y Y coordinate of the cell.
-	 * @param exists Existence of the wall.
-	 * @throws OutOfBoardException Occurs when desired cell does not belong to board.
+	 * Sets given wall to existing or non existing state. Value "true" indicates
+	 * that wall exist, "false" means that there is no wall present.
+	 * 
+	 * @param x
+	 *            X coordinate of the cell.
+	 * @param y
+	 *            Y coordinate of the cell.
+	 * @param exists
+	 *            Existence of the wall.
+	 * @throws OutOfBoardException
+	 *             Occurs when desired cell does not belong to board.
 	 */
-	protected void setEastWall(int x, int y, boolean exists) throws OutOfBoardException {
+	protected void setEastWall(int x, int y, boolean exists)
+			throws OutOfBoardException {
 		try {
 			this.verticalWalls[x + 1][y] = exists;
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -148,15 +165,20 @@ public class Board {
 	}
 
 	/**
-	 * Sets given wall to existing or non existing state.
-	 * Value "true" indicates that wall exist, "false" means
-	 * that there is no wall present.
-	 * @param x X coordinate of the cell.
-	 * @param y Y coordinate of the cell.
-	 * @param exists Existence of the wall.
-	 * @throws OutOfBoardException Occurs when desired cell does not belong to board.
+	 * Sets given wall to existing or non existing state. Value "true" indicates
+	 * that wall exist, "false" means that there is no wall present.
+	 * 
+	 * @param x
+	 *            X coordinate of the cell.
+	 * @param y
+	 *            Y coordinate of the cell.
+	 * @param exists
+	 *            Existence of the wall.
+	 * @throws OutOfBoardException
+	 *             Occurs when desired cell does not belong to board.
 	 */
-	protected void setWestWall(int x, int y, boolean exists) throws OutOfBoardException {
+	protected void setWestWall(int x, int y, boolean exists)
+			throws OutOfBoardException {
 		try {
 			this.verticalWalls[x][y] = exists;
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -167,15 +189,20 @@ public class Board {
 	}
 
 	/**
-	 * Sets given wall to existing or non existing state.
-	 * Value "true" indicates that wall exist, "false" means
-	 * that there is no wall present.
-	 * @param x X coordinate of the cell.
-	 * @param y Y coordinate of the cell.
-	 * @param exists Existence of the wall.
-	 * @throws OutOfBoardException Occurs when desired cell does not belong to board.
+	 * Sets given wall to existing or non existing state. Value "true" indicates
+	 * that wall exist, "false" means that there is no wall present.
+	 * 
+	 * @param x
+	 *            X coordinate of the cell.
+	 * @param y
+	 *            Y coordinate of the cell.
+	 * @param exists
+	 *            Existence of the wall.
+	 * @throws OutOfBoardException
+	 *             Occurs when desired cell does not belong to board.
 	 */
-	protected void setNorthWall(int x, int y, boolean exists) throws OutOfBoardException {
+	protected void setNorthWall(int x, int y, boolean exists)
+			throws OutOfBoardException {
 		try {
 			this.horizontalWalls[x][y] = exists;
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -186,15 +213,20 @@ public class Board {
 	}
 
 	/**
-	 * Sets given wall to existing or non existing state.
-	 * Value "true" indicates that wall exist, "false" means
-	 * that there is no wall present.
-	 * @param x X coordinate of the cell.
-	 * @param y Y coordinate of the cell.
-	 * @param exists Existence of the wall.
-	 * @throws OutOfBoardException Occurs when desired cell does not belong to board.
+	 * Sets given wall to existing or non existing state. Value "true" indicates
+	 * that wall exist, "false" means that there is no wall present.
+	 * 
+	 * @param x
+	 *            X coordinate of the cell.
+	 * @param y
+	 *            Y coordinate of the cell.
+	 * @param exists
+	 *            Existence of the wall.
+	 * @throws OutOfBoardException
+	 *             Occurs when desired cell does not belong to board.
 	 */
-	protected void setSouthWall(int x, int y, boolean exists) throws OutOfBoardException {
+	protected void setSouthWall(int x, int y, boolean exists)
+			throws OutOfBoardException {
 		try {
 			this.horizontalWalls[x][y + 1] = exists;
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -203,7 +235,7 @@ public class Board {
 			throw new OutOfBoardException();
 		}
 	}
-	
+
 	/**
 	 * Resets board to initial state.
 	 */
@@ -214,5 +246,22 @@ public class Board {
 				this.verticalWalls[x][y] = true;
 			}
 		}
+	}
+	
+	/**
+	 * Gets height of the board.
+	 * @return Returns integer value - myHeight.
+	 */
+	public int getHeight() {
+		return this.myHeight;
+
+	}
+	
+	/**
+	 * Gets width of the board.
+	 * @return Returns integer value - myWidth.
+	 */
+	public int getWidth() {
+		return this.myWidth;
 	}
 }
